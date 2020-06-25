@@ -50,7 +50,7 @@ digits = load_digits()
 data=digits.data
 data=255-data
 
-k=3
+k=20
 
 n_samples, n_features = data.shape
 n_digits = len(np.unique(digits.target))
@@ -100,8 +100,12 @@ print(82 * '_')
 # Visualize the results on PCA-reduced data
 
 reduced_data = PCA(n_components=2).fit_transform(data)
-kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
+#----------------------------------------------------------------------
+#kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
+kmeans = KMeans(init='k-means++', n_clusters=k, n_init=10) #editado
+#----------------------------------------------------------------------
 kmeans.fit(reduced_data)
+
 
 # Step size of the mesh. Decrease to increase the quality of the VQ.
 h = .02     # point in the mesh [x_min, x_max]x[y_min, y_max].
@@ -136,19 +140,3 @@ plt.ylim(y_min, y_max)
 plt.xticks(())
 plt.yticks(())
 plt.show()
-
-
-#----------Código Agregado-----------------
-kmeans.fit(digits.data)
-kmeans.cluster_centers_.shape
-l=0           
-if k < 5:
-    l=1
-else:
-    while k >= 5:
-        l=l+1
-        k=k-5
-
-fig, axes = plt.subplots(l,5, subplot_kw=dict(xticks=[], yticks=[]))
-for ax, digit in zip(axes.flat, kmeans.cluster_centers_):
-    ax.imshow(digit.reshape(8,8), cmap="gray")
