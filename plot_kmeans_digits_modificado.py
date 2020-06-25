@@ -50,7 +50,7 @@ digits = load_digits()
 data=digits.data
 data=255-data
 
-k=20
+k=3
 
 n_samples, n_features = data.shape
 n_digits = len(np.unique(digits.target))
@@ -136,3 +136,19 @@ plt.ylim(y_min, y_max)
 plt.xticks(())
 plt.yticks(())
 plt.show()
+
+
+#----------Código Agregado-----------------
+kmeans.fit(digits.data)
+kmeans.cluster_centers_.shape
+l=0           
+if k < 5:
+    l=1
+else:
+    while k >= 5:
+        l=l+1
+        k=k-5
+
+fig, axes = plt.subplots(l,5, subplot_kw=dict(xticks=[], yticks=[]))
+for ax, digit in zip(axes.flat, kmeans.cluster_centers_):
+    ax.imshow(digit.reshape(8,8), cmap="gray")
