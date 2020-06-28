@@ -50,7 +50,7 @@ digits = load_digits()
 data=digits.data
 data=255-data
 
-k=20
+k=10
 
 n_samples, n_features = data.shape
 n_digits = len(np.unique(digits.target))
@@ -102,9 +102,25 @@ print(82 * '_')
 reduced_data = PCA(n_components=2).fit_transform(data)
 #----------------------------------------------------------------------
 #kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
-kmeans = KMeans(init='k-means++', n_clusters=k, n_init=10) #editado
+#kmeans = KMeans(init='k-means++', n_clusters=k, n_init=10) #editado
 #----------------------------------------------------------------------
+#kmeans.fit(reduced_data)
+
+
+
+kmeans64 = KMeans(init='k-means++', n_clusters=k, n_init=10)
+kmeans64.fit(data)
+
+centroids64 = kmeans64.cluster_centers_
+pcai=PCA(n_components=2)
+centroids2 = pcai.fit_transform(centroids64)
+reduced_data = pcai.transform(data)
+
+kmeans = KMeans(init=centroids2, n_clusters=len(centroids64), n_init=10)
 kmeans.fit(reduced_data)
+
+#-----------------------------------------------------------------------
+
 
 
 # Step size of the mesh. Decrease to increase the quality of the VQ.
